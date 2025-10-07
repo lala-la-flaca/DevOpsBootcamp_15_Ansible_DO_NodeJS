@@ -1,0 +1,69 @@
+---
+- name: Install nodeJS and npm
+  hosts: 174.138.55.43
+  tasks:
+  - name: Update repo & cache
+    apt: 
+      update_cache : yes
+      force_apt_get: yes
+      cache_valid_time: 3600
+  - name: Install npm and nodeJS
+    apt:
+      pkg:
+        - nodejs
+        - npm
+
+- name: create a new linux user
+  hosts: 174.138.55.43
+  vars_files:
+    project-vars.yaml
+  tasks:
+    - name: create linux user
+      user:
+        name: "{{user_name}}"
+        comment:  "{{user_name}} admin"
+        group: admin
+      register: user_creation_result
+    
+    - debug: msg={{user_creation_result.name}}
+        
+
+- name: Deploy nodejs app
+  hosts: 174.138.55.43
+  become: True
+  become_user: "{{user_name}}"
+  vars_files:
+    project-vars.yaml
+  vars:
+    #location: /home/lala/DevOpsBootCamp/ansible/demo1/nodejs-app/
+    user_home_directory: /home/{{user_name}}
+    #version: 1.0.0
+  tasks:   
+  - name: unpack the nodejs tar file
+    unarchive:
+      src: "{{location}}/nodejs-app-{{version}}.tgz"
+      dest: "{{user_home_directory}}"
+  
+  - name: install dependencies
+    community.general.npm:
+      path: "{{user_home_directory}}/package"
+  
+  - name: start the application
+    command: 
+      chdir: "{{user_home_directory}}/package/app"
+      cmd: node server
+    async: 1000
+    poll: 0
+
+  - name: ensure app is running
+    shell: ps aux | grep node
+    register: app_status
+  
+  - name: print output from command
+    debug:
+      var: app_status.stdout_lines
+
+
+
+
+

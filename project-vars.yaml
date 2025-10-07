@@ -1,0 +1,4 @@
+version: 1.0.0
+location: /home/lala/DevOpsBootCamp/ansible/demo1/nodejs-app/
+user_name: node
+
