@@ -62,7 +62,7 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
  
 8. Create a second play to add a new Linux user
    ```bash
-       - name: create a new linux user
+   - name: create a new linux user
       hosts: 174.138.55.43
       vars_files:
         project-vars.yaml
