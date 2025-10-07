@@ -37,46 +37,99 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
 4. Add the droplet’s IP address, SSH key, and Ansible user to the host file.
    
    ```bash
+   174.138.55.43 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
    ```
    <img src="" width=800 />
    
 5. Create a play to install Node.js and npm.
    
    ```bash
+       ---
+    - name: Install nodeJS and npm
+      hosts: 174.138.55.43
    ```
    <img src="" width=800 />
    
 6. Add a task to update the apt package repository and cache.
     
    ```bash
+    tasks:
+  - name: Update repo & cache
+    apt: 
+      update_cache : yes
+      force_apt_get: yes
+      cache_valid_time: 3600
    ```
    <img src="" width=800 />
    
 7. Add a second task to install Node.js and npm.
     
    ```bash
+    - name: Install npm and nodeJS
+    apt:
+      pkg:
+        - nodejs
+        - npm
+  
    ```
    <img src="" width=800 />
    
-8. Create a second play to deploy the Node.js application.
+8. Create a second play to add a new Linux user
+   ```bash
+       - name: create a new linux user
+      hosts: 174.138.55.43
+      vars_files:
+        project-vars.yaml
+      tasks:
+        - name: create linux user
+          user:
+            name: "{{user_name}}"
+            comment:  "{{user_name}} admin"
+            group: admin
+          register: user_creation_result
+        
+        - debug: msg={{user_creation_result.name}}
+   ```
+10. Create a third play to deploy the Node.js application.
     
    ```bash
+      - name: Deploy nodejs app
+  hosts: 174.138.55.43
+  become: True
+  become_user: "{{user_name}}"
+  vars_files:
+    project-vars.yaml
+  vars:
+    user_home_directory: /home/{{user_name}}
+  tasks:   
+  - name: unpack the nodejs tar file
+    unarchive:
+      src: "{{location}}/nodejs-app-{{version}}.tgz"
+      dest: "{{user_home_directory}}"
+  
+  - name: install dependencies
+    community.general.npm:
+      path: "{{user_home_directory}}/package"
+  
+  - name: start the application
+    command: 
+      chdir: "{{user_home_directory}}/package/app"
+      cmd: node server
+    async: 1000
+    poll: 0
+
+  - name: ensure app is running
+    shell: ps aux | grep node
+    register: app_status
+  
+  - name: print output from command
+    debug:
+      var: app_status.stdout_lines
    ```
    <img src="" width=800 />
    
-9. Add a task to copy the Node.js project folder to the droplet.
-    
-   ```bash
-   ```
-   <img src="" width=800 />
-   
-11. Add a second task to unpack the .tgz file for the Node.js application.
-    
-    ```bash
-    ```
-    <img src="" width=800 />
-    
-12. Run the Ansible playbook to complete the deployment.
+
+13. Run the Ansible playbook to complete the deployment.
     
     ```bash
     ```
