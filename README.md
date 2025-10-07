@@ -31,21 +31,19 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
    <img src="" width=800 />
   
 3. Create a host file in Ansible.
-   
-   <img src="" width=800 />
   
 4. Add the droplet’s IP address, SSH key, and Ansible user to the host file.
    
    ```bash
-   174.138.55.43 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
+     174.138.55.43 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
    ```
-   <img src="" width=800 />
+   <img src="https://github.com/lala-la-flaca/DevOpsBootcamp_15_Ansible_DO_NodeJS/blob/main/Img/hosts%20file.PNG" width=800 />
    
 5. Create a play to install Node.js and npm.
    
    ```bash
    ---
-    - name: Install nodeJS and npm
+    - name: Install NodeJS and npm
       hosts: 174.138.55.43
       tasks:
       - name: Update repo & cache
@@ -53,16 +51,17 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
           update_cache : yes
           force_apt_get: yes
           cache_valid_time: 3600
-      - name: Install npm and nodeJS
+      - name: Install npm and NodeJS
         apt:
           pkg:
             - nodejs
             - npm
    ```
+   <img src="https://github.com/lala-la-flaca/DevOpsBootcamp_15_Ansible_DO_NodeJS/blob/main/Img/play%201.PNG" width=800 />
  
 6. Create a second play to add a new Linux user
    ```bash
-   - name: create a new linux user
+   - name: create a new Linux user
       hosts: 174.138.55.43
       vars_files:
         project-vars.yaml
@@ -76,10 +75,11 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
         
         - debug: msg={{user_creation_result.name}}
    ```
+   <img src="https://github.com/lala-la-flaca/DevOpsBootcamp_15_Ansible_DO_NodeJS/blob/main/Img/play%202.PNG" width=800 />
 7. Create a third play to deploy the Node.js application.
     
    ```bash
-    - name: Deploy nodejs app
+    - name: Deploy NodeJS app
       hosts: 174.138.55.43
       become: True
       become_user: "{{user_name}}"
@@ -88,7 +88,7 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
       vars:
         user_home_directory: /home/{{user_name}}
       tasks:   
-      - name: unpack the nodejs tar file
+      - name: unpack the Node.js tar file
         unarchive:
           src: "{{location}}/nodejs-app-{{version}}.tgz"
           dest: "{{user_home_directory}}"
@@ -112,10 +112,11 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
         debug:
           var: app_status.stdout_lines
    ```
-   <img src="" width=800 />
+   <img src="https://github.com/lala-la-flaca/DevOpsBootcamp_15_Ansible_DO_NodeJS/blob/main/Img/play%203.png" width=800 />
    
 
 8. Run the Ansible playbook to complete the deployment.
     ```bash
+    ansible-playbook -i hosts deploy-node-playbook.yaml
     ```
-    <img src="" width=800 />
+    <img src="https://github.com/lala-la-flaca/DevOpsBootcamp_15_Ansible_DO_NodeJS/blob/main/Img/running%20playbook%202.PNG" width=800 />
