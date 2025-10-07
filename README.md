@@ -47,33 +47,33 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
        ---
     - name: Install nodeJS and npm
       hosts: 174.138.55.43
-   ```
-   <img src="" width=800 />
-   
-6. Add a task to update the apt package repository and cache.
+      tasks:
+      - name: Update repo & cache
+        apt: 
+          update_cache : yes
+          force_apt_get: yes
+          cache_valid_time: 3600
+      - name: Install npm and nodeJS
+        apt:
+          pkg:
+            - nodejs
+            - npm
     
-   ```bash
-    tasks:
-  - name: Update repo & cache
-    apt: 
-      update_cache : yes
-      force_apt_get: yes
-      cache_valid_time: 3600
+    - name: create a new linux user
+      hosts: 174.138.55.43
+      vars_files:
+        project-vars.yaml
+      tasks:
+        - name: create linux user
+          user:
+            name: "{{user_name}}"
+            comment:  "{{user_name}} admin"
+            group: admin
+          register: user_creation_result
+        
+        - debug: msg={{user_creation_result.name}}
    ```
-   <img src="" width=800 />
-   
-7. Add a second task to install Node.js and npm.
-    
-   ```bash
-    - name: Install npm and nodeJS
-    apt:
-      pkg:
-        - nodejs
-        - npm
-  
-   ```
-   <img src="" width=800 />
-   
+ 
 8. Create a second play to add a new Linux user
    ```bash
        - name: create a new linux user
