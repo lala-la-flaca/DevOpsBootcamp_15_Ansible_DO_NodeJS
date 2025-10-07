@@ -27,8 +27,6 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
 # ⚙️ Project Configuration
 1. Download the Node.js application from the [Nana Repo](https://techworld-with-nana.teachable.com/courses/1108792/lectures/31738145#:~:text=https%3A//gitlab.com/twn%2Ddevops%2Dbootcamp/latest/15%2Dansible/nodejs%2Dapp)
 2. Create a DigitalOcean droplet.
-   
-   <img src="" width=800 />
   
 3. Create a host file in Ansible.
   
