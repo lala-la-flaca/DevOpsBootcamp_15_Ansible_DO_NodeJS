@@ -79,38 +79,38 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
 10. Create a third play to deploy the Node.js application.
     
    ```bash
-      - name: Deploy nodejs app
-  hosts: 174.138.55.43
-  become: True
-  become_user: "{{user_name}}"
-  vars_files:
-    project-vars.yaml
-  vars:
-    user_home_directory: /home/{{user_name}}
-  tasks:   
-  - name: unpack the nodejs tar file
-    unarchive:
-      src: "{{location}}/nodejs-app-{{version}}.tgz"
-      dest: "{{user_home_directory}}"
-  
-  - name: install dependencies
-    community.general.npm:
-      path: "{{user_home_directory}}/package"
-  
-  - name: start the application
-    command: 
-      chdir: "{{user_home_directory}}/package/app"
-      cmd: node server
-    async: 1000
-    poll: 0
-
-  - name: ensure app is running
-    shell: ps aux | grep node
-    register: app_status
-  
-  - name: print output from command
-    debug:
-      var: app_status.stdout_lines
+    - name: Deploy nodejs app
+      hosts: 174.138.55.43
+      become: True
+      become_user: "{{user_name}}"
+      vars_files:
+        project-vars.yaml
+      vars:
+        user_home_directory: /home/{{user_name}}
+      tasks:   
+      - name: unpack the nodejs tar file
+        unarchive:
+          src: "{{location}}/nodejs-app-{{version}}.tgz"
+          dest: "{{user_home_directory}}"
+      
+      - name: install dependencies
+        community.general.npm:
+          path: "{{user_home_directory}}/package"
+      
+      - name: start the application
+        command: 
+          chdir: "{{user_home_directory}}/package/app"
+          cmd: node server
+        async: 1000
+        poll: 0
+    
+      - name: ensure app is running
+        shell: ps aux | grep node
+        register: app_status
+      
+      - name: print output from command
+        debug:
+          var: app_status.stdout_lines
    ```
    <img src="" width=800 />
    
