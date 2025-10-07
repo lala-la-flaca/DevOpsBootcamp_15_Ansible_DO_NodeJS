@@ -44,7 +44,7 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
 5. Create a play to install Node.js and npm.
    
    ```bash
-       ---
+   ---
     - name: Install nodeJS and npm
       hosts: 174.138.55.43
       tasks:
@@ -58,20 +58,6 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
           pkg:
             - nodejs
             - npm
-    
-    - name: create a new linux user
-      hosts: 174.138.55.43
-      vars_files:
-        project-vars.yaml
-      tasks:
-        - name: create linux user
-          user:
-            name: "{{user_name}}"
-            comment:  "{{user_name}} admin"
-            group: admin
-          register: user_creation_result
-        
-        - debug: msg={{user_creation_result.name}}
    ```
  
 8. Create a second play to add a new Linux user
