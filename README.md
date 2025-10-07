@@ -13,7 +13,9 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
 
 # 🎯 Features
   ✅ Deploys Node.js application via Ansible playbook.
+  
   🔐 Creates a dedicated Linux user for deployment.
+  
   ☁️ Automates package installation and permissions.
 
 # Prerequisites
