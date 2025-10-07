@@ -1,7 +1,7 @@
 # Module 15 – Configuration Management with Ansible
 This exercise is part of Module 15 from the TWN DevOps Bootcamp. In Module 15, we focus on automating server setup and application deployment using Ansible. You learn how to configure servers, deploy Node.js and Nexus, integrate with Terraform and Jenkins, manage Docker containers, and organize playbooks with roles. Each demo builds practical automation skills for real-world DevOps environments.
 
-# 📦Demo 1 – Health Check: EC2 Status Checks
+# 📦Demo 1 – Automate NodeJS application Deployment
 # 📌 Objective
 Use Ansible to automate the deployment of a Node.js application on a DigitalOcean server. This demo shows how to provision a server, set up the environment, create a Linux user, and deploy the app automatically.
 
