@@ -60,7 +60,7 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
             - npm
    ```
  
-8. Create a second play to add a new Linux user
+6. Create a second play to add a new Linux user
    ```bash
    - name: create a new linux user
       hosts: 174.138.55.43
@@ -76,7 +76,7 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
         
         - debug: msg={{user_creation_result.name}}
    ```
-10. Create a third play to deploy the Node.js application.
+7. Create a third play to deploy the Node.js application.
     
    ```bash
     - name: Deploy nodejs app
@@ -115,8 +115,7 @@ Use Ansible to automate the deployment of a Node.js application on a DigitalOcea
    <img src="" width=800 />
    
 
-13. Run the Ansible playbook to complete the deployment.
-    
+8. Run the Ansible playbook to complete the deployment.
     ```bash
     ```
     <img src="" width=800 />
